@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0c10" />
+  <meta name="description" content="Visor 3D local para GLB, GLTF, FBX, OBJ, STL, PLY, USD, USDZ y más. Abre carpetas, ZIP y RAR sin subir tus archivos." />
+  <title>View to 3D</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar glass">
+      <div class="brand" aria-label="View to 3D">
+        <div class="brand-mark" aria-hidden="true">V3</div>
+        <div>
+          <strong>View to 3D</strong>
+          <span>Local 3D preview</span>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-btn" id="fitBtn" title="Centrar modelo" aria-label="Centrar modelo">⌖</button>
+        <button class="icon-btn" id="wireBtn" title="Wireframe" aria-label="Wireframe">◇</button>
+        <button class="icon-btn active" id="gridBtn" title="Cuadrícula" aria-label="Cuadrícula">#</button>
+        <button class="icon-btn" id="rotateBtn" title="Auto-rotación" aria-label="Auto-rotación">↻</button>
+        <button class="icon-btn" id="shotBtn" title="Captura PNG" aria-label="Captura PNG">▣</button>
+        <button class="icon-btn" id="fullBtn" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>
+      </div>
+    </header>
+
+    <aside class="sidebar glass" id="sidebar">
+      <div class="sidebar-head">
+        <div>
+          <span class="eyebrow">ARCHIVOS</span>
+          <h1>Abre tu modelo</h1>
+        </div>
+        <button class="mini-btn" id="clearBtn" title="Limpiar">×</button>
+      </div>
+
+      <div class="source-actions">
+        <button class="primary-btn" id="openFilesBtn">Elegir archivos</button>
+        <button class="secondary-btn" id="openFolderBtn">Abrir carpeta</button>
+        <input id="fileInput" type="file" hidden multiple />
+        <input id="folderInput" type="file" hidden multiple webkitdirectory directory />
+      </div>
+
+      <div class="privacy-note"><span>●</span> Todo se procesa en tu navegador. No se sube el modelo.</div>
+
+      <section class="panel-block">
+        <div class="section-title">
+          <span>Paquete</span>
+          <span class="counter" id="assetCount">0</span>
+        </div>
+        <div id="assetList" class="asset-list empty-list">
+          <div class="empty-copy">Arrastra un modelo, sus texturas o un ZIP/RAR.</div>
+        </div>
+      </section>
+
+      <section class="panel-block" id="modelInfoBlock">
+        <div class="section-title"><span>Escena</span><span id="modelExt" class="tag">—</span></div>
+        <div class="stats-grid">
+          <div><span>Objetos</span><strong id="statObjects">0</strong></div>
+          <div><span>Triángulos</span><strong id="statTriangles">0</strong></div>
+          <div><span>Vértices</span><strong id="statVertices">0</strong></div>
+          <div><span>Materiales</span><strong id="statMaterials">0</strong></div>
+          <div><span>Texturas</span><strong id="statTextures">0</strong></div>
+          <div><span>Animaciones</span><strong id="statAnimations">0</strong></div>
+        </div>
+      </section>
+
+      <section class="panel-block animation-panel" id="animationPanel" hidden>
+        <div class="section-title"><span>Animación</span><span id="animTime">0.00s</span></div>
+        <select id="animationSelect" aria-label="Animación"></select>
+        <div class="anim-row">
+          <button class="secondary-btn" id="playBtn">Pausa</button>
+          <label>Velocidad <input id="animSpeed" type="range" min="0" max="2" step="0.05" value="1" /></label>
+        </div>
+      </section>
+
+      <section class="panel-block formats-block">
+        <div class="section-title"><span>Formatos principales</span></div>
+        <p>GLB · GLTF · FBX · OBJ/MTL · STL · PLY · 3MF · DAE · 3DS · USD/USDZ · VRML · VTK · PCD · VOX · GCODE · BVH · DRACO</p>
+        <p class="muted">ZIP y RAR pueden contener el modelo y sus recursos. Alembic <b>.ABC</b> se detecta, pero el navegador no dispone de un parser estable de Three.js; se muestra una advertencia para convertirlo a GLB/USD.</p>
+      </section>
+    </aside>
+
+    <main class="viewer-shell" id="viewerShell">
+      <canvas id="viewport"></canvas>
+
+      <div class="drop-overlay" id="dropOverlay" aria-hidden="true">
+        <div class="drop-card">
+          <div class="drop-icon">3D</div>
+          <strong>Suelta aquí</strong>
+          <span>Modelo + materiales + texturas + ZIP/RAR</span>
+        </div>
+      </div>
+
+      <div class="welcome" id="welcome">
+        <div class="welcome-orbit" aria-hidden="true"><span></span><i></i></div>
+        <h2>Previsualiza modelos 3D<br />sin instalar nada.</h2>
+        <p>Arrastra el modelo con sus texturas, una carpeta completa o un archivo comprimido.</p>
+        <div class="welcome-buttons">
+          <button class="primary-btn" id="welcomeOpenBtn">Abrir modelo</button>
+          <button class="secondary-btn" id="welcomeFolderBtn">Abrir carpeta</button>
+        </div>
+        <div class="format-chips">
+          <span>GLB</span><span>FBX</span><span>OBJ</span><span>STL</span><span>USDZ</span><span>ZIP</span><span>RAR</span>
+        </div>
+      </div>
+
+      <div class="loading glass" id="loading" hidden>
+        <div class="spinner"></div>
+        <div><strong id="loadingTitle">Procesando…</strong><span id="loadingDetail">Preparando archivos</span></div>
+      </div>
+
+      <div class="view-hud glass" id="viewHud">
+        <span id="modelName">Sin modelo</span>
+        <span id="renderInfo">WebGL</span>
+      </div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
