@@ -4,11 +4,13 @@ Visor 3D estático para navegador y GitHub Pages. Los archivos se procesan local
 
 ## Formatos
 
-Carga directa: GLB/GLTF, FBX, OBJ + MTL, STL, PLY, 3MF, DAE, 3DS, USD/USDA/USDC/USDZ, VRML, VTK/VTP, PCD, XYZ, VOX, GCODE, BVH, Draco (`.drc`), SPLAT/SPZ y AMF.
+Carga directa: GLB/GLTF, FBX, OBJ + MTL, STL, PLY, 3MF, DAE, 3DS, USD/USDA/USDC/USDZ, VRML, VTK/VTP, PCD, XYZ, VOX, GCODE, BVH, Draco (`.drc`) y AMF.
 
 Paquetes: `.zip` con JSZip y `.rar` con `node-unrar-js`/WebAssembly. Las referencias de texturas y archivos auxiliares se resuelven contra los otros archivos seleccionados o extraídos.
 
 > Alembic `.abc`: se detecta y se informa al usuario, pero no se anuncia como compatible porque Three.js no ofrece un loader Alembic estable para navegador. Conviene exportarlo a GLB/GLTF o USD/USDZ.
+
+> SPLAT/SPZ: Three.js actual dispone de loaders, pero su renderizado `GaussianSplat` requiere WebGPU. Este visor mantiene WebGL como backend principal para maximizar compatibilidad, por lo que no se anuncia soporte SPLAT/SPZ todavía.
 
 ## GitHub Pages
 
