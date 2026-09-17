@@ -12,9 +12,7 @@ Paquetes: `.zip` con JSZip y `.rar` con `node-unrar-js`/WebAssembly. Las referen
 
 ## GitHub Pages
 
-El contenido vive en `main` desde la raíz del repositorio. Se incluye un workflow de Pages para desplegar esa raíz al hacer push a `main`.
-
-Si Pages aún no está habilitado para el repositorio, GitHub exige configurarlo una vez en **Settings → Pages → Source: GitHub Actions**. Después, cada push vuelve a desplegar automáticamente.
+El sitio se publica desde `main` y la raíz `/` del repositorio. El repositorio ya usa el despliegue de GitHub Pages por branch, así que cada cambio en `main` vuelve a publicar la página automáticamente.
 
 ## Dependencias CDN
 
