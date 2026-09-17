@@ -1,0 +1,148 @@
+/* Mobile/UI corrections layered after styles.css. */
+[hidden] {
+  display: none !important;
+}
+
+@supports (height: 100dvh) {
+  html,
+  body,
+  #app {
+    height: 100dvh;
+  }
+}
+
+@media (max-width: 820px) {
+  :root {
+    --mobile-panel-h: clamp(205px, 28dvh, 250px);
+  }
+
+  .topbar {
+    top: max(8px, env(safe-area-inset-top));
+    left: max(8px, env(safe-area-inset-left));
+    right: max(8px, env(safe-area-inset-right));
+  }
+
+  /* Before a package exists, the welcome screen is the only file picker. */
+  .sidebar:has(#assetList.empty-list) {
+    display: none;
+  }
+
+  body:has(#assetList.empty-list) .view-hud {
+    display: none;
+  }
+
+  .sidebar {
+    left: max(8px, env(safe-area-inset-left));
+    right: max(8px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    height: var(--mobile-panel-h);
+    padding: 14px;
+  }
+
+  .welcome {
+    left: 50%;
+    top: 50%;
+    width: min(92vw, 520px);
+    transform: translate(-50%, -50%);
+    padding: 0 8px;
+  }
+
+  .welcome.hidden {
+    transform: translate(-50%, -47%);
+  }
+
+  .welcome-orbit {
+    width: 78px;
+    height: 78px;
+    margin-bottom: 16px;
+  }
+
+  .welcome-orbit::before,
+  .welcome-orbit::after {
+    inset: 13px;
+  }
+
+  .welcome-orbit span {
+    inset: 24px;
+  }
+
+  .welcome-orbit i {
+    width: 6px;
+    height: 6px;
+    right: 12px;
+    top: 35px;
+  }
+
+  .welcome h2 {
+    font-size: clamp(28px, 8.2vw, 38px);
+    line-height: 1.02;
+  }
+
+  .welcome p {
+    width: min(420px, 92%);
+    margin-top: 13px;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .welcome-buttons {
+    width: min(360px, 94%);
+    margin: 16px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .welcome-buttons button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .format-chips {
+    margin-top: 12px;
+  }
+
+  .loading {
+    left: 50%;
+    top: calc(max(8px, env(safe-area-inset-top)) + 67px);
+    width: min(360px, calc(100vw - 32px));
+    min-width: 0;
+  }
+
+  .view-hud {
+    right: max(8px, env(safe-area-inset-right));
+    bottom: calc(var(--mobile-panel-h) + max(16px, env(safe-area-inset-bottom)));
+    max-width: calc(100vw - 16px);
+  }
+
+  .toast {
+    bottom: calc(var(--mobile-panel-h) + max(25px, env(safe-area-inset-bottom)));
+  }
+}
+
+@media (max-width: 460px) {
+  /* Override the older rule that stacked both buttons vertically. */
+  .welcome-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    width: min(350px, 96%);
+  }
+
+  .welcome-buttons button {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+  }
+
+  .format-chips {
+    display: none;
+  }
+}
+
+@media (max-width: 350px) {
+  .welcome-buttons {
+    grid-template-columns: 1fr;
+    width: min(220px, 90%);
+  }
+}
